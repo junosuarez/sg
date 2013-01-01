@@ -104,15 +104,17 @@ module.exports = function (context, size, game) {
 
       // orbit
       context.beginPath()
+      var speedPct = 1 - (planet.orbitalPeriod / planet.MAX_ORBITAL_PERIOD)
+      var tailLen = Math.PI / 2 * speedPct
       var orbitOrigin = plot(Geo.polarToCart(planet.eccentricity))
-      context.arc(orbitOrigin.x, orbitOrigin.y, Geo.distance(here, orbitOrigin), 0, 2*Math.PI, false)
+      context.arc(orbitOrigin.x, orbitOrigin.y, Geo.distance(here, orbitOrigin), planet.location.a - tailLen, planet.location.a, false)
       context.lineWidth = 2
       context.strokeStyle = planet.owner.color
       context.stroke()
 
       // label
       var label = planet.name
-      label = orbitOrigin.x + ' ' + orbitOrigin.y + ' ' + Geo.distance(here, orbitOrigin)
+      //label = orbitOrigin.x + ' ' + orbitOrigin.y + ' ' + Geo.distance(here, orbitOrigin)
       context.font = '20px "Press Start 2p"';
       context.textAlign = 'center';
       context.fillStyle = '#ffff66';
