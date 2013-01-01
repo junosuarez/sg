@@ -15,11 +15,22 @@ body{
   right: 0;
   bottom: 0;
   opacity: .4;
+  z-index: -1;
+}
+#console {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+#console div{
+  color: #ffff66;
+  font: 20px "Press Start 2p";
+  transition: opacity;
 }
 </style>
 </head>
 <body>
-  <div id=fade></div>
+<div id=fade></div>
 <script src="./game.js"></script>
 </body>
 </html>

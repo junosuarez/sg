@@ -4,6 +4,7 @@ var _ = {
   random: require('./randomMember')
 }
 var Geo = require('./geometry')
+var Console = require('./console')
 
 module.exports = Player;
 
@@ -45,16 +46,34 @@ Player.prototype.toggleShields = function () {
 
 Player.prototype.orbit = function (target) {
   if (!target || !target.orbitable) {
-    console.log('can\'t orbit ', target)
+    Console('Can\'t orbit target')
     return;
   }
-  if (Geo.polarDistance(this.location, target.location) > 10000) {
-    console.log('too far')
-    return
+  var myLoc = this.orbiting ? this.orbiting.location : this.location
+  if (Geo.polarDistance(myLoc, target.location) > 5000) {
+    Console(target.name + 'is too far to orbit')
+    return;
   }
 
-  console.log('orbiting ', target)
-  target.owner = this
-  this.location = target.location
-  this.oribitalPeriod = target.orbitalPeriod
+  if (this.orbiting) {
+    this.orbiting.orbitedBy = null
+  }
+  this.orbiting = target
+  this.orbiting.orbitedBy = this
+
+  Console('Orbiting ' + target.name)
+  //this.capture(target)
+  var radius = (target.size * 300 + 100)
+  this.location = Geo.polarOriginate({r: radius}, target.location)
+  this.orbitalPeriod = target.orbitalPeriod
+}
+
+Player.prototype.capture = function (target) {
+  if (!target || !target.isPlanet) {
+    Console('Can\'t capture target')
+    return;
+  }
+  target.owner = this;
+  Console('Captured ' + target.name)
+  process.emit('captured', this, target)
 }

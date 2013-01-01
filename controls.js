@@ -1,3 +1,6 @@
+var Touch = require('./touch')
+var Geo = require('./geometry')
+
 var keys = {
   right: 37
  , up: 38
@@ -6,10 +9,12 @@ var keys = {
  , s: 83
  , o: 79
  , l: 76
+ , question: 191
+ , esc: 27
 }
 
 
-module.exports = function(game) {
+module.exports = function(game, renderer) {
 
 
   function handleKey(code) {
@@ -35,18 +40,44 @@ module.exports = function(game) {
       game.opts.showLabels = !game.opts.showLabels
     }
 
+    else if (code === keys.question) {
 
+    }
 
-
-
+    else if (code === keys.esc) {
+      game.togglePause()
+    }
 
   }
 
+
+  Touch.on('touchend', function (e) {
+    console.log(e)
+
+    game.target = getTarget(e)
+  })
+
+
+  Touch.on('doubletap', function (e) {
+    var target = getTarget(e)
+    if (target && target.isPlanet) {
+      game.me.orbit(target)
+    }
+  })
+
+
+  function getTarget(e) {
+    var touch = e.changedTouches[0]
+    var point = Geo.point(touch.clientX, touch.clientY)
+    var target = renderer.getTarget(point)
+    return target
+  }
 
 
   return {
     handleKey: handleKey
   }
+
 
 
 

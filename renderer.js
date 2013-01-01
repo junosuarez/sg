@@ -19,6 +19,16 @@ module.exports = function (context, size, game) {
     //console.log('yay')
   }
 
+  render.getTarget = function (point) {
+    for (var i = 0; i < render.targets.length; i++){
+      var target = render.targets[i]
+      if (Geo.distance(point, target.point) < (target.size + 10)) {
+
+        return target.model
+      }
+    }
+  }
+
 
   var s = Math.min(size.x, size.y) / 2
 
@@ -80,8 +90,8 @@ module.exports = function (context, size, game) {
       context.lineWidth = 3
       context.strokeStyle = '#ffff66'
     } else {
-      context.lineWidth = 1
-      context.strokeStyle = '#eeeeee'
+      context.lineWidth = 2
+      context.strokeStyle = 'rgba(255,255,255,.7)'
     }
     context.stroke()
 
@@ -95,6 +105,22 @@ module.exports = function (context, size, game) {
       context.textAlign = 'center';
       context.fillStyle = '#ffff66';
       context.fillText(planet.name, here.x, here.y - (planet.size * 10 + 10));
+    }
+
+    if (planet.orbitedBy) {
+
+      var y = here.y + (planet.size * 10 + 10)
+      var x = here.x - 49
+
+      var width = planet.alignment[planet.owner.id]
+
+
+      context.beginPath()
+      context.moveTo(x, y)
+      context.lineTo(x + width, y)
+      context.lineWidth = 4
+      context.strokeStyle = planet.owner.color
+      context.stroke()
     }
 
   }

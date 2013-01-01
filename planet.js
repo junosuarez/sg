@@ -37,11 +37,12 @@ function Planet() {
   }
 
   this.id = Id()
+  this.color = '#666666'
   this.name = randomName()
   this.location = Galaxy.Coord()
   this.size = _.random([2,3,3,3,3,4,4])
   this.orbitalPeriod = _.random.int(100, 400) // ticks
-  this.owner = null
+  this.owner = this
 
 
   this.technologyLevel = _.random.int(1, 10)
@@ -49,9 +50,10 @@ function Planet() {
   this.habitability = _.random.int(1, 10)
   this.population = _.random.int(20,100) * this.size
 
-  this.alignment = {
-    self: _.random.int(80, 100)
-  }
+  this.alignment = {}
+  this.alignment[this.id] = _.random.int(80, 100)
+
 }
 
 Planet.prototype.orbitable = true
+Planet.prototype.isPlanet = true // TODO: refactor, cause wtf?

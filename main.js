@@ -8,8 +8,14 @@ var Galaxy = require('./galaxy')
 var Touch = require('./touch')
 var Simulation = require('./simulation')
 var Controls = require('./controls')
+var Console = require('./console')
 
 var raf = require('raf')
+
+
+var emitter = new (require('events').EventEmitter)
+process.emit = emitter.emit
+process.on = emitter.on
 
 
 var screenCanvas = document.createElement('canvas')
@@ -22,6 +28,14 @@ var body = document.getElementsByTagName('body')[0]
 
 body.appendChild(screenCanvas)
 
+
+body.appendChild(Console.init())
+
+Console('Welcome to SPACE GAEM')
+setTimeout(function () {
+  //Console('press ? for controls')
+}, 2000)
+
 var screen = screenCanvas.getContext('2d')
 
 
@@ -29,7 +43,7 @@ var screen = screenCanvas.getContext('2d')
 //// generate map
 // build some planets
 
-var planets = _.random.range(0,9).map(Planet)
+var planets = _.random.range(0,7).map(Planet)
 
 console.log(planets)
 
@@ -37,24 +51,37 @@ console.log(planets)
 var me = Player()
 me.homePlanet = _.random(planets)
 me.homePlanet.owner = me
-
+me.homePlanet.alignment[me.id] = 100
+me.location = me.homePlanet.location
+me.orbit(me.homePlanet)
 
 // set up galaxy
 var galaxy = Galaxy()
 galaxy.planets = planets
 
+var simTick = true
 
 var game = {
   galaxy: galaxy,
   me: me,
   target: me.homePlanet,
-  opts: {}
+  opts: {},
+  togglePause: function () {
+    if (simTick) {
+      clearInterval(simTick)
+      simTick = null
+      Console('Paused!')
+    } else {
+      simTick = setInterval(sim, 250)
+      Console('Resumed!')
+    }
+  }
 }
 
-var controls = Controls(game)
 
 
 var render = Renderer(screen, size, game)
+var controls = Controls(game, render)
 
 var renderClock = raf(screen)
 
@@ -63,7 +90,9 @@ renderClock.on('data', function () {
   //renderClock.pause()
 })
 
-setInterval(Simulation(game), 250)
+var sim = Simulation(game)
+
+simTick = setInterval(sim, 100)
 
 
 
@@ -77,25 +106,19 @@ function getSize() {
 
 window.addEventListener('resize', getSize, false)
 
-window.addEventListener('touchend', function (e) {
 
-  Touch.targeted(e.changedTouches[0], render.targets, function (target) {
-    game.target = target.model
-  })
 
-}, false)
+window.addEventListener('touchmove', function (e) {
+  e.preventDefault()
+})
 
 window.addEventListener('keydown', function (e) {
-  console.log(e.keyCode)
+  console.log(e.keyCode, e)
   controls.handleKey(e.keyCode)
   if (!e.metaKey) {
     e.preventDefault()
   }
 }, false)
-
-
-
-
 
 
 window.debug = {
@@ -108,3 +131,18 @@ window.debug = {
   game: game
 }
 
+
+process.on('captured', function () {
+  var remaining = game.galaxy.planets.filter(function (planet) {
+    return planet.owner !== game.me
+  })
+  if (remaining.length < 3 && remaining.length > 0) {
+    var one = remaining.length === 1;
+    Console(remaining.length + ' planet' + (one ? '' : 's') + ' remain' + (one ? 's' : '') + '!')
+  }
+  else if (remaining.length === 0) {
+    game.togglePause()
+    Console.clear()
+    Console.freeze('Flawless victory!')
+  }
+})

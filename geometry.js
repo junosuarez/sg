@@ -53,3 +53,10 @@ module.exports.distance = function (point1, point2) {
 module.exports.polarDistance = function (polar1, polar2) {
   return Math.sqrt(sq(polar1.r) + sq(polar2.r) - (2 * polar1.r * polar2.r * Math.cos(polar1.a - polar2.a)))
 }
+
+module.exports.polarOriginate = function(polar1, polarOrigin) {
+  return {
+    r: polarOrigin.r + polar1.r
+  , a: polarOrigin.a
+  }
+}
