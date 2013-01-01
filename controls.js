@@ -1,12 +1,21 @@
 var Touch = require('./touch')
 var Geo = require('./geometry')
 
+
+var mouse = {x:0, y: 0}
+
+window.addEventListener('mousemove', function (e) {
+  mouse.x = e.clientX
+  mouse.y = e.clientY
+})
+
 var keys = {
   right: 37
  , up: 38
  , left: 39
  , down: 40
  , s: 83
+ , t: 84
  , o: 79
  , l: 76
  , question: 191
@@ -19,6 +28,12 @@ module.exports = function(game, renderer) {
 
   function handleKey(code) {
 
+
+    if (code === keys.t) {
+
+        game.target = getTarget(mouse)
+
+    }
 
     if (code === keys.s) {
       game.me.toggleShields()
@@ -52,7 +67,8 @@ module.exports = function(game, renderer) {
 
 
   Touch.on('touchend', function (e) {
-    console.log(e)
+    var touch = e.changedTouches[0]
+    var point = Geo.point(touch.clientX, touch.clientY)
 
     game.target = getTarget(e)
   })
@@ -66,9 +82,8 @@ module.exports = function(game, renderer) {
   })
 
 
-  function getTarget(e) {
-    var touch = e.changedTouches[0]
-    var point = Geo.point(touch.clientX, touch.clientY)
+  function getTarget(point) {
+
     var target = renderer.getTarget(point)
     return target
   }
