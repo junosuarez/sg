@@ -1,0 +1,25 @@
+{
+  "name": "sg",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "key": "~0.1.11",
+    "raf": "0.0.0"
+  },
+  "devDependencies": {
+    "browserify": "~1.17.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "echo starting browserify watch; node node_modules/browserify/bin/cmd.js main.js -w -d -o built/game.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jden/sg.git"
+  },
+  "author": "",
+  "license": "none yet, look but dont touch",
+  "gitHead": "a3c617ba41be85bfe565a54639ff5921e610cd30",
+  "readmeFilename": "README.md"
+}

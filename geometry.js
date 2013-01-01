@@ -9,6 +9,13 @@ module.exports.polarToCart = function (polar) {
   }
 }
 
+module.exports.cartToPolar = function(cart) {
+  return {
+    r: Math.sqrt(sq(cart.x) + sq(cart.y))
+  , a: Math.atan2(cart.y, cart.x)
+  }
+}
+
 
 module.exports.scale = function (min1, max1, min2, max2) {
   var scale1 = max1 - min1
@@ -43,6 +50,13 @@ module.exports.point = function (x, y) {
   return {
     x: x
   , y: y
+  }
+}
+
+module.exports.polarPoint = function (r, a) {
+  return {
+    r: r
+  , a: a
   }
 }
 

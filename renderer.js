@@ -101,10 +101,24 @@ module.exports = function (context, size, game) {
     }
 
     if (planet === game.target || game.opts.showLabels) {
+
+      // orbit
+      context.beginPath()
+      var orbitOrigin = plot(Geo.polarToCart(planet.eccentricity))
+      context.arc(orbitOrigin.x, orbitOrigin.y, Geo.distance(here, orbitOrigin), 0, 2*Math.PI, false)
+      context.lineWidth = 2
+      context.strokeStyle = planet.owner.color
+      context.stroke()
+
+      // label
+      var label = planet.name
+      label = orbitOrigin.x + ' ' + orbitOrigin.y + ' ' + Geo.distance(here, orbitOrigin)
       context.font = '20px "Press Start 2p"';
       context.textAlign = 'center';
       context.fillStyle = '#ffff66';
-      context.fillText(planet.name, here.x, here.y - (planet.size * 10 + 10));
+      context.fillText(label, here.x, here.y - (planet.size * 10 + 10));
+
+
     }
 
     if (planet.orbitedBy) {

@@ -1,6 +1,6 @@
 var Id = require('./id')
 var Galaxy = require('./galaxy')
-
+var Geo = require('./geometry')
 var _ = {
   random: require('./randomMember')
 }
@@ -40,6 +40,10 @@ function Planet() {
   this.color = '#666666'
   this.name = randomName()
   this.location = Galaxy.Coord()
+  this.eccentricity = {
+    r: _.random.int(0, 99)
+  , a: Math.random() * 2 * Math.PI
+  }
   this.size = _.random([2,3,3,3,3,4,4])
   this.orbitalPeriod = _.random.int(100, 400) // ticks
   this.owner = this

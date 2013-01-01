@@ -23,14 +23,18 @@ module.exports = function (game) {
 
 function movePlanets(planets) {
   planets.forEach(function (planet) {
-    planet.location.a += 2 * Math.PI / planet.orbitalPeriod
+    planet.location.a += 2 * Math.PI / planet.orbitalPeriod / 2
+    var loc = Geo.polarToCart(planet.location)
+    var eccentricity = Geo.polarToCart(planet.eccentricity)
+    loc = Geo.originate(loc, eccentricity)
+    planet.location = Geo.cartToPolar(loc)
   })
 }
 
 
 function movePlayer(player) {
 
-  player.location.a += 2 * Math.PI / player.orbitalPeriod
+  player.location.a += 2 * Math.PI / player.orbitalPeriod / 2
 
 
   //player.heading += .5

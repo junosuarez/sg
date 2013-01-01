@@ -1,7 +1,6 @@
 var Touch = require('./touch')
 var Geo = require('./geometry')
 
-
 var mouse = {x:0, y: 0}
 
 window.addEventListener('mousemove', function (e) {

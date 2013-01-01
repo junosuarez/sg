@@ -33,6 +33,11 @@ body.appendChild(Console.init())
 
 Console('Welcome to SPACE GAEM')
 setTimeout(function () {
+  if ('ontouchend' in window) {
+    Console('Tap to target, Doubletap to orbit. Engage!')
+  } else {
+    Console('Mouse to aim, T to target, O to orbit. Engage!')
+  }
   //Console('press ? for controls')
 }, 2000)
 
@@ -92,7 +97,7 @@ renderClock.on('data', function () {
 
 var sim = Simulation(game)
 
-simTick = setInterval(sim, 100)
+simTick = setInterval(sim, 50)
 
 
 

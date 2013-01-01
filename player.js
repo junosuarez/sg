@@ -51,7 +51,7 @@ Player.prototype.orbit = function (target) {
   }
   var myLoc = this.orbiting ? this.orbiting.location : this.location
   if (Geo.polarDistance(myLoc, target.location) > 5000) {
-    Console(target.name + 'is too far to orbit')
+    Console(target.name + ' is too far to orbit')
     return;
   }
 
