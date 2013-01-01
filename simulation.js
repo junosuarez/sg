@@ -56,7 +56,7 @@ function doOrbiting(player) {
 
     if(planet.owner !== player) {
       player.power -= 30
-      console.log('capturing')
+      // console.log('capturing')
 
       if (planet.alignment[planet.owner.id] > CAPTURE_RATE) {
         planet.alignment[planet.owner.id] -= CAPTURE_RATE
@@ -94,7 +94,7 @@ function powerBudget(player) {
     player.power = 999
   }
 
-  console.log(player.power)
+  // console.log(player.power)
   if (player.power < 0) {
     game.togglePause()
     Console.clear()

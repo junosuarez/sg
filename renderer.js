@@ -17,6 +17,8 @@ module.exports = function (context, size, game) {
 
     drawMe(game.me)
 
+    drawPowerMeter(game.me)
+
     //console.log('yay')
   }
 
@@ -166,6 +168,22 @@ module.exports = function (context, size, game) {
     context.stroke()
   }
 
+  function drawPowerMeter(player) {
+    var pct = player.power / player.maxPower
+
+    var label = 'Power: ' + Math.round(pct * 100) + '%'
+    context.font = '20px "Press Start 2p"';
+    context.textAlign = 'left';
+    context.fillStyle = '#ffff66';
+    context.fillText(label, 10, size.y - 100)
+
+    var controlled = game.galaxy.planets.filter(function (planet) {
+      return planet.owner === player
+    }).length
+
+    label = 'Planets: ' + controlled + ' / ' + game.galaxy.planets.length
+    context.fillText(label, 10, size.y - 70)
+  }
 
 
 

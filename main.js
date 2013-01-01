@@ -50,7 +50,7 @@ var screen = screenCanvas.getContext('2d')
 
 var planets = _.random.range(0,7).map(Planet)
 
-console.log(planets)
+// console.log(planets)
 
 // make a player
 var me = Player()
@@ -118,7 +118,7 @@ window.addEventListener('touchmove', function (e) {
 })
 
 window.addEventListener('keydown', function (e) {
-  console.log(e.keyCode, e)
+  // console.log(e.keyCode, e)
   controls.handleKey(e.keyCode)
   if (!e.metaKey) {
     e.preventDefault()

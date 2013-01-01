@@ -68,6 +68,8 @@ Player.prototype.orbit = function (target) {
   this.orbitalPeriod = target.orbitalPeriod
 }
 
+Player.prototype.maxPower = 999
+
 Player.prototype.capture = function (target) {
   if (!target || !target.isPlanet) {
     Console('Can\'t capture target')
