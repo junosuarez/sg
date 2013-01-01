@@ -1,0 +1,130 @@
+var Galaxy = require('./galaxy')
+var Geo = require('./geometry')
+
+module.exports = function (context, size, game) {
+
+  var render = function () {
+    render.targets = []
+
+    context.clearRect(0,0,size.x,size.y)
+
+
+    drawQuadrants()
+
+
+    game.galaxy.planets.forEach(drawPlanet)
+
+    drawMe(game.me)
+
+    //console.log('yay')
+  }
+
+
+  var s = Math.min(size.x, size.y) / 2
+
+  var gScale = Geo.scale(0, Galaxy.GALACTIC_RADIUS, 0, s)
+  var translateOrigin = Geo.translate(gScale(Galaxy.GALACTIC_RADIUS), gScale(Galaxy.GALACTIC_RADIUS))
+  var plot = function (point) {
+    var p = {
+      x: gScale(point.x)
+    , y: gScale(point.y)
+    }
+
+    return translateOrigin(p)
+
+  }
+
+
+  function drawMe(me) {
+    var here = plot(Geo.polarToCart(me.location))
+
+    context.beginPath()
+    context.arc(here.x, here.y, 10, 0, 2 * Math.PI, false)
+    context.fillStyle = me.color//'#eeeeee'
+    context.fill()
+
+    var lineEnd = Geo.originate(Geo.polarToCart({r: 25, a: me.heading}), here)
+    context.beginPath()
+    context.moveTo(here.x, here.y)
+    context.lineTo(lineEnd.x, lineEnd.y)
+    context.lineWidth = 5
+    context.strokeStyle = me.color //'#eeeeee'
+    context.stroke()
+
+
+    if (me.shieldsUp) {
+      context.beginPath()
+      context.arc(here.x, here.y, 30, 0, 2 * Math.PI, false)
+      context.lineWidth = 2
+      context.fillStyle = 'rgba(44, 118, 245, 0.5)'
+      context.strokeStyle = '#2C76F5'
+      context.stroke()
+      context.fill()
+    }
+
+  }
+
+  function drawPlanet(planet) {
+    var here = plot(Geo.polarToCart(planet.location))
+
+    render.targets.push({
+      model: planet
+    , point: here
+    , size: planet.size * 10
+    })
+
+    context.beginPath()
+    context.arc(here.x, here.y, planet.size * 10, 0, 2 * Math.PI, false)
+
+    if (planet === game.target) {
+      context.lineWidth = 3
+      context.strokeStyle = '#ffff66'
+    } else {
+      context.lineWidth = 1
+      context.strokeStyle = '#eeeeee'
+    }
+    context.stroke()
+
+    if (planet.owner) {
+      context.fillStyle = planet.owner.color
+      context.fill()
+    }
+
+    if (planet === game.target || game.opts.showLabels) {
+      context.font = '20px "Press Start 2p"';
+      context.textAlign = 'center';
+      context.fillStyle = '#ffff66';
+      context.fillText(planet.name, here.x, here.y - (planet.size * 10 + 10));
+    }
+
+  }
+
+
+  function drawQuadrants() {
+
+    var mid = gScale(Galaxy.GALACTIC_RADIUS)
+
+    drawLine(0, mid, size.x, mid, '#aaaaaa')
+    drawLine(mid, 0, mid, size.y, '#aaaaaa')
+
+  }
+
+  function drawJoystick() {
+
+  }
+
+  function drawLine(x1, y1, x2, y2, style) {
+    context.beginPath()
+    context.moveTo(x1, y1)
+    context.lineTo(x2, y2)
+    context.lineWidth = .5
+    context.strokeStyle = style
+    context.stroke()
+  }
+
+
+
+
+
+  return render
+}
