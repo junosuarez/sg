@@ -41,11 +41,11 @@ function Planet() {
   this.name = randomName()
   this.location = Galaxy.Coord()
   this.eccentricity = {
-    r: _.random.int(0, 99)
+    r: _.random.int(0, 999)
   , a: Math.random() * 2 * Math.PI
   }
   this.size = _.random([2,3,3,3,3,4,4])
-  this.orbitalPeriod = _.random.int(100, 400) // ticks
+  this.orbitalPeriod = _.random.int(100, Planet.prototype.MAX_ORBITAL_PERIOD) // ticks
   this.owner = this
 
 
@@ -61,3 +61,4 @@ function Planet() {
 
 Planet.prototype.orbitable = true
 Planet.prototype.isPlanet = true // TODO: refactor, cause wtf?
+Planet.prototype.MAX_ORBITAL_PERIOD = 400

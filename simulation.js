@@ -23,11 +23,16 @@ module.exports = function (game) {
 
 function movePlanets(planets) {
   planets.forEach(function (planet) {
-    planet.location.a += 2 * Math.PI / planet.orbitalPeriod / 2
-    var loc = Geo.polarToCart(planet.location)
     var eccentricity = Geo.polarToCart(planet.eccentricity)
-    loc = Geo.originate(loc, eccentricity)
-    planet.location = Geo.cartToPolar(loc)
+    var negE = {x: -eccentricity.x, y: -eccentricity.y}
+    var cart = Geo.polarToCart(planet.location)
+    cart = Geo.originate(cart, negE)
+    var loc = Geo.cartToPolar(cart)
+    loc.a += 2 * Math.PI / planet.orbitalPeriod / 2
+    cart = Geo.polarToCart(loc)
+    cart = Geo.originate(cart, eccentricity)
+
+    planet.location = Geo.cartToPolar(cart)
   })
 }
 

@@ -45,7 +45,6 @@ module.exports.originate = function(point, origin) {
   }
 }
 
-
 module.exports.point = function (x, y) {
   return {
     x: x
