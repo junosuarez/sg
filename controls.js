@@ -69,12 +69,14 @@ module.exports = function(game, renderer) {
     var touch = e.changedTouches[0]
     var point = Geo.point(touch.clientX, touch.clientY)
 
-    game.target = getTarget(e)
+    game.target = getTarget(point)
   })
 
 
   Touch.on('doubletap', function (e) {
-    var target = getTarget(e)
+    var touch = e.changedTouches[0]
+    var point = Geo.point(touch.clientX, touch.clientY)
+    var target = getTarget(point)
     if (target && target.isPlanet) {
       game.me.orbit(target)
     }
