@@ -1,5 +1,6 @@
 var Galaxy = require('./galaxy')
 var Geo = require('./geometry')
+var Color = require('./color')
 
 module.exports = function (context, size, game) {
 
@@ -104,12 +105,13 @@ module.exports = function (context, size, game) {
 
       // orbit
       context.beginPath()
-      var speedPct = 1 - (planet.orbitalPeriod / planet.MAX_ORBITAL_PERIOD)
-      var tailLen = Math.PI / 2 * speedPct
+      //var speedPct = 1 - (planet.orbitalPeriod / planet.MAX_ORBITAL_PERIOD)
+      //var tailLen = Math.PI / 2 * speedPct
+      var tailLen = 2*Math.PI
       var orbitOrigin = plot(Geo.polarToCart(planet.eccentricity))
-      context.arc(orbitOrigin.x, orbitOrigin.y, Geo.distance(here, orbitOrigin), planet.location.a - tailLen, planet.location.a, false)
+      context.arc(orbitOrigin.x, orbitOrigin.y, Geo.distance(here, orbitOrigin), 0, tailLen, false)
       context.lineWidth = 2
-      context.strokeStyle = planet.owner.color
+      context.strokeStyle = Color.hexToRGBA(planet.owner.color, .5)
       context.stroke()
 
       // label
