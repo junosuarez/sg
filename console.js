@@ -18,7 +18,8 @@ function Console(message) {
   msgEl.innerText = message
 
   setTimeout(function () {
-    el.removeChild(msgEl)
+    if (msgEl)
+      el.removeChild(msgEl)
   }, 3000)
 }
 
